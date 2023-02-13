@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <div class="from-container">
+        <form name="appendDataForm">
+        
+            <label for="tiitle" class="flex-child">Title: 
+                <input type="text" name="title">
+            </label>
+            <label for="description" class="flex-child">Description:
+                <textarea name="description" id="description" cols="30" rows="3"></textarea>
+            </label>
+            <label for="date">
+                <input type="date" name="date" class="flex-child">
+            </label>
+            <label for="add-data" class="flex-child">
+                <input type="button" name="add-data" value="Add Data" onclick="appendData()">
+            </label>
+        </form>
+    </div>
+    <hr>
+    <br>
+    <br>
+    <div class="stored-output" >
+        
+    </div>
+    <script src="./index.js"></script>
+</body>
+</html>
