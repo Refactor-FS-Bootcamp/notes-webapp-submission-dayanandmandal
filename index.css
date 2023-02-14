@@ -110,3 +110,11 @@ textarea {
 .option-logo-three-vertical-line:hover {
     cursor: pointer;
 }
+
+.show-on-empty {
+    display: block;
+}
+
+.to-store-id {
+    display: none;
+}

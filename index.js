@@ -16,6 +16,17 @@ const MONTH_NAME_OBJECT = {
 const formData = [];
 let idCount = +localStorage.getItem("count");
 let inputDeleteButtonReference = null;
+let tempDiv = null;
+let tempDivId = -1;
+
+function checkForEmptyList() {
+  const empty = document.querySelector(".show-on-empty");
+  if (localStorage.length <= 1) {
+    empty.style.display = "";
+  } else {
+    empty.style.display = "none";
+  }
+}
 
 setCurrentDate();
 function setCurrentDate() {
@@ -47,7 +58,7 @@ function displayStoredLocalStorageData() {
     formData.push(obj);
     displayFormData(formData);
   }
-  setCurrentDate();
+  checkForEmptyList();
 }
 
 // to hide delete-button after showing
@@ -62,7 +73,7 @@ function hideDeleteOption() {
     inputDeleteButtonReference.nextSibling.previousElementSibling.style.backgroundColor =
       "";
   }
-  setCurrentDate();
+  checkForEmptyList();
 }
 
 function appendData() {
@@ -83,11 +94,17 @@ function appendData() {
     return;
   }
 
+  if (tempDiv != null && tempDivId != -1) {
+    tempDiv.remove();
+    localStorage.removeItem(tempDivId);
+  }
+  tempDiv = null;
+  tempDivId = -1;
+
   formData.push(obj);
   localStorage.setItem(idCount.toString(), JSON.stringify(obj));
   localStorage.setItem("count", +localStorage.getItem("count") + 1);
   displayFormData(formData);
-  setCurrentDate();
 }
 
 function displayFormData(formData) {
@@ -95,6 +112,7 @@ function displayFormData(formData) {
   const div = document.createElement("div");
 
   const titleNode = getTitleNode(currentData);
+  const idNode = getIdNode(currentData);
   const descriptionNode = getDescriptionNode(currentData);
   const dateNode = getDateNode(currentData);
 
@@ -123,8 +141,10 @@ function displayFormData(formData) {
       break;
     }
   }
+  div.appendChild(idNode);
 
   document.appendDataForm.reset();
+  setCurrentDate();
 }
 
 function editButtonFunctionality(div, id) {
@@ -137,8 +157,13 @@ function editButtonFunctionality(div, id) {
       div.firstElementChild.nextElementSibling.innerHTML.substring(13);
     let date = div.querySelector(".stored-output-child-date").innerHTML;
     document.forms.appendDataForm.date.value = correctDateFormatForJS(date);
+    tempDiv = div;
+    tempDivId = getIdFromLocalStorage(tempDiv);
   };
-  div.remove();
+}
+
+function getIdFromLocalStorage(div) {
+  return div.querySelector(".to-store-id").innerHTML;
 }
 
 function correctDateFormatForJS(date) {
@@ -261,7 +286,6 @@ function getDeleteButtonNode(id) {
 
 function addOptionImage(div, id) {
   const imgNode = getThreeVerticalImagesNode();
-  // imgNode.alt = id;
   div.appendChild(imgNode);
 }
 
@@ -276,6 +300,15 @@ function getTitleNode(currentData) {
   const titleNode = document.createElement("p");
   const titleTextNode = document.createTextNode(`Title: ${currentData.title}`);
   titleNode.appendChild(titleTextNode);
+  return titleNode;
+}
+
+function getIdNode(currentData) {
+  const titleNode = document.createElement("p");
+  titleNode.className = "to-store-id";
+  const titleTextNode = document.createTextNode(`${currentData.id}`);
+  titleNode.appendChild(titleTextNode);
+  // titleNode.style.display = "none";
   return titleNode;
 }
 
